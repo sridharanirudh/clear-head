@@ -1,4 +1,4 @@
-# Clear Head
+# Serenity
 
 ### Install Flask
 ```shell
