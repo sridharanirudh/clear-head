@@ -1,0 +1,113 @@
+.header {
+	background-color: #3090C7;
+	height : 150px;
+}
+
+.header h1{
+
+	height : 60px;
+	padding: 25px 20px 20px 20px;
+	font-family : "Arial Narrow";
+	color : white;
+	background-color : #3099B9;
+	font-size : 25px;
+	border-radius : 15px 25px 15px 10px;
+	border-color : black;
+}
+
+.main {
+	height : 800px;
+	background-color: #7D0558;
+}
+
+.align div{
+	float : left;	
+}
+
+.feed {
+	width:300px;
+	height:700px;
+	background-color: black;
+	margin-left: 10px;
+	margin-right:10px;
+	margin-top: 35px;
+}
+
+.chatbot {
+	position:relative;
+	left:530px;
+	top:60px;
+	height :630px;
+	width:450px;
+	background-color : #463E3F;
+	border-radius : 30px 30px 30px 30px;
+}
+
+.chatbot-screen {
+	width:  410px;
+	height: 500px;
+	position: relative;
+	top:  0px;
+	left: 20px;
+	background-color: white;
+}
+
+.speaker{
+	position : relative;
+	top:20px;
+	left:170px;
+	width:100px;
+	height:4px;
+	background-color:white;
+	margin-bottom:40px;
+	border-radius : 50px 50px 50px 50px;
+}
+
+.msg-area div,input{
+	height:45px;
+	width:360px;
+	position : relative;
+	left: 10px;
+	top:  18px;
+
+	border-width:0px 0px 0px 0px;	
+	border-radius : 25px 25px 25px 25px;
+	border-width : 1px 5px 2px 5px;
+}
+
+
+.button-shape button{
+	width: 60px;
+	height: 40px;
+	position: relative;
+	left: 20px;
+	top:  20px;
+	background-color:white;
+	border-radius: 25px 25px 25px 25px;
+	cursor: pointer;
+	padding: 4px 4px 4px 4px;
+	font-family: "Verdana";
+
+	transition-duration : 1s;
+}
+
+.button-shape button:hover{
+ 	background-color: #C12267;
+ 	color: white;
+}
+
+.footer {
+	height : 200px;
+}
+
+.footer li{
+	float:left;
+	padding: 5px 400px 5px 5px;
+	list-style : None;
+}
+
+
+.footer span{
+
+	font-size: 30px;
+}
