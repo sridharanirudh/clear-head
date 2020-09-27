@@ -3,22 +3,6 @@ from sqlalchemy import *
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
-class GUID(TypeDecorator):
-    impl = String(32)
-
-    def process_bind_param(self, value, dialect):
-        if value is not None:
-            return "%.32x" % value
-        else:
-            return MNone
-
-    def process_result_value(self, value, dialect):
-        if value is None:
-            return value
-        else:
-            return uuid.UUID(value)
-
-
 class User(db.Model):
 
     __tablename__ = "users"
@@ -28,18 +12,24 @@ class User(db.Model):
         nullable = False,
     )
     user_id = db.Column(
-        db.String(32),
+        db.String(32)
     )
     name = db.Column(
-        db.String(60)
+        db.String(60),
+        nullable = False
     )
     age = db.Column(
-        db.Integer()
+        db.Integer(),
+        default = 0
     )
 
     def __repr__(self):
         return f"<Username:{name} Age: {age}>"
 
+    def __init__(self, name, age, user_id):
+        self.name = name
+        self.age = age
+        self.user_id = user_id
 
 class Sessions(db.Model):
     

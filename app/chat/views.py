@@ -4,6 +4,9 @@ from flask import Flask, request, jsonify, render_template
 from app import db
 import uuid
 
+
+user = dict()
+sess = dict()
 @chat.route('/', methods= ['GET', 'POST'])
 def index():
     return render_template('index.html')
@@ -18,35 +21,46 @@ def introduction():
 @chat.route('/api/start', methods= ['POST'])
 def start():
     if request.method == 'POST':
-        if 'user_id' in request.form:
-            req = request.json
-            user_id = req['user_id']
-            name = User.query.filter_by(user_id = user_id).first().name
+        # import pdb; pdb.set_trace()
+        # if request.json.get('user_id'):
+        # if 'user_id' in user:
+        #     req = request.json
+        #     user_id = req['user_id']
+        #     name = user[user_id].name
 
-            #TODO
-            # If name doesn't exist, the next view is the root view
-        else:
-            req = request.json
-            name = req['name']
-            age = int(req['age'])
-            user_id = uuid.uuid4().hex
-            user = User(
-                user_id=uuid.uuid4().hex,
-                name = name,
-                age = age
-            )
-            session_uuid = uuid.uuid4().hex
-            sess = Sessions(
-                session_uuid = session_uuid,
-                user = user
-            )
-            db.session.add(user)
-            db.session.add(sess)
-            db.session.commit()
+        #     #TODO
+        #     # If name doesn't exist, the next view is the root view
+        # else:
+        req = request.json
+        name = req['name']
+        age = int(req['age'])
+        user_id = uuid.uuid4().hex
+        sess_id = uuid.uuid4().hex
+        user[user_id] = {
+            'name': name,
+            'age': age
+        }
+        sess[sess_id] = {
+            'user_id': user_id 
+        }
+            # user = User(
+            #     user_id=uuid.uuid4().hex,
+            #     name = name,
+            #     age = age
+            # )
+            # session_uuid = uuid.uuid4().hex
+            # sess = Sessions(
+            #     session_uuid = session_uuid,
+            #     user = user
+            # )
+            # import pdb; pdb.set_trace()
+            # db.session.add(user)
+            # db.session.add(sess)
+            # db.session.commit()
 
     response = {
         'messages': [f"Hey {name}, how are you doing today?"],
-        'session_id': session_uuid,
+        'session_id': sess_id,
         'next': 'fork',
         'user_id': user_id,
         'name': name,
@@ -60,7 +74,9 @@ def fork():
         req = request.json
         user_id = req['user_id']
         answer = req['answer'].lower()
-        name = User.query.filter_by(user_id = user_id).first().name
+        # name = User.query.filter_by(user_id = user_id).first().name
+        # import pdb; pdb.set_trace()
+        name = user[user_id].name
         if answer == 'good':
             messages = [f"It's great that you are feeling good today {name}.", "Would you like to see your previous sessions?"]
             next_route = 'path1'
@@ -106,15 +122,17 @@ def is_bad():
             timer = 1
 
         ##TODO
-        sess_id = request.form['session_id']
-        sess = Sessions.query.filter_by(session_id = sess_id).first()
-        sess.start_level = quantity
-        db.session.commit()
+        sess_id = req['session_id']
+        sess[sess_id]['start'] = quantity
+        # sess = Sessions.query.filter_by(session_id = sess_id).first()
+        # sess.start_level = quantity
+        # db.session.commit()
         response = {
             'messages': messages,
             'timer': timer,
             'post_message': ['What has been bothering you lately?'],
         }
+    return jsonify(response)
 
 # @chat.route('/serious', methods= ['POST'])
 # def end_fork():
