@@ -15,36 +15,21 @@ def introduction():
 
     return message
 
-users = {}
-sessions = {}
-
-
 @chat.route('/api/start', methods= ['POST'])
 def start():
     if request.method == 'POST':
-        if False and 'user_id' in request.form:
+        if 'user_id' in request.form:
             req = request.json
             user_id = req['user_id']
-            print(users)
-            name = users[user_id]['name']
-            #name = User.query.filter_by(user_id = user_id).first().name
+            name = User.query.filter_by(user_id = user_id).first().name
 
-            ##TODO
-            ## If name doesn't exist, the next view is the root view
+            #TODO
+            # If name doesn't exist, the next view is the root view
         else:
             req = request.json
-            if 'user_id' not in req:
-                name = req['name']
-                age = int(req['age'])
-                user_id = uuid.uuid4().hex
-                suid = uuid.uuid4().hex
-            else:
-                name = "random"
-                age = 12
-                user_id = req['user_id']
-            users[user_id] = {'name': name, 'age': age}
-            #sessions[]
-            '''
+            name = req['name']
+            age = int(req['age'])
+            user_id = uuid.uuid4().hex
             user = User(
                 user_id=uuid.uuid4().hex,
                 name = name,
@@ -52,24 +37,23 @@ def start():
             )
             db.session.add(user)
             db.session.commit()
-            '''
 
     response = {
         'messages': [f"Hey {name}, how are you doing today?"],
         'next': 'fork',
         'user_id': user_id,
-        'name': users[user_id]['name'],
-        'age': users[user_id]['age']
+        'name': name,
+        'age': age
     }
     return jsonify(response)
 
-@chat.route('/api/fork', methods= ['POST'])
+@chat.route('/api/fork', methods=['POST'])
 def fork():
     if request.method == 'POST':
         req = request.json
         user_id = req['user_id']
         answer = req['answer'].lower()
-        name = users[user_id]['name']
+        name = User.query.filter_by(user_id = user_id).first().name
         if answer == 'good':
             messages = [f"It's great that you are feeling good today {name}.", "Would you like to see your previous sessions?"]
             next_route = 'path1'
@@ -86,7 +70,7 @@ def fork():
         }
         return jsonify(response)
 
-@chat.route('/api/path1', methods= ['POST'])
+@chat.route('/api/path1', methods=['POST'])
 def is_good():
     if request.method == 'POST':
         req = request.json
@@ -96,7 +80,6 @@ def is_good():
         else:
             messages = "Temporary"
             # Need to query the sessions table for all values of user_id. Generate a plot on the start level per day"
-
 
         response = {
             'messages': messages,
