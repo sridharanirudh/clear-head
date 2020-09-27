@@ -36,7 +36,6 @@ class User(db.Model):
     age = db.Column(
         db.Integer()
     )
-    sessions = db.relationship('sessions', backref='users', lazy=True)
 
     def __repr__(self):
         return f"<Username:{name} Age: {age}>"
@@ -78,3 +77,5 @@ class Sessions(db.Model):
         db.ForeignKey('users.id'),
         nullable=False
     )
+
+    user = db.relationship('User', backref=db.backref('users', lazy=True))

@@ -18,9 +18,16 @@ npm install -g webpack-cli
 ```shell
 npm install
 ```
+### To initialize database
+```
+flask db init
+flask db migrate
+flask db upgrade
+```
 
 ### To run the app
 ```shell
-python app.py
+export FLASK_APP=run.py
+flask run
 webpack --watch
 ```

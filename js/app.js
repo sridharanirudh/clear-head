@@ -11,8 +11,7 @@ const CHATAREA = {
 	paddingLeft: '0px',
 	margin: '0px auto',
 	backgroundColor: 'white',
-	borderLeft: '1px solid rgb(230, 230, 230)',
-	borderRight: '1px solid rgb(230, 230, 230)',
+	border: '1px solid rgb(230, 230, 230)',
 	height: 'calc(100% - 60px)',
 	display: 'flex',
 	flexDirection: 'column',
@@ -29,6 +28,17 @@ const CONVERSATIONAREA = {
 const CHATBOX = {
 	boxSizing: 'border-box',
 	alignSelf: 'flex-start',
+	backgroundColor: 'rgb(228, 228, 228)',
+	display: 'inline-block',
+	padding: '0.625rem 1rem',
+	marginBottom: '0.236rem',
+	borderRadius: '0.25rem 1.375rem 1.375rem 0.25rem',
+	wordBreak: 'break-word'
+}
+
+const CHATBOXRIGHT = {
+	boxSizing: 'border-box',
+	alignSelf: 'flex-end',
 	backgroundColor: 'rgb(228, 228, 228)',
 	display: 'inline-block',
 	padding: '0.625rem 1rem',
@@ -79,6 +89,32 @@ class App extends React.Component {
 			this.getName()
 		}
 	}
+	start(user_id) {
+		const { chats } = this.state
+		const { cookies } = this.props
+		axios.post('/api/start', {
+			user_id: user_id
+		})
+			.then(res => {
+				console.log(res)
+				let newChats = [...chats]
+				res.data.messages.forEach(message => {
+					newChats.push({
+						type: 'bot',
+						message: message,
+						next: res.data.next,
+						range: res.data.range,
+					})
+				})
+				cookies.set('user', res.data.user_id)
+				this.setState({user: res.data.user_id, loading: false, chats: newChats, age: res.data.age})
+			})
+			.catch(res => {
+				console.log(res)
+				this.setState({error: true, loading: false})
+			})
+
+	}
 	getName() {
 		const { chats } = this.state
 		let nextChats = [
@@ -90,34 +126,127 @@ class App extends React.Component {
 	getAge() {
 		const { chats } = this.state
 		let nextChats = [...chats]
+		let name = chats[chats.length - 1].message
 		nextChats.push({
 			type: 'bot',
 			message: 'Please enter your age',
 			next: 'saveNameAndAge',
 			_key: 'age'
 		})
-		this.setState({chats: nextChats, loading: false})
+		this.setState({chats: nextChats, loading: false, name: name})
 	}
 	saveNameAndAge() {
-		const { chats } = this.state
+		const { user, chats, name } = this.state
 		const { cookies } = this.props
-		axios.post('/api/start')
+		let age = chats[chats.length - 1].message
+		axios.post('/api/start', {
+			name: name,
+			age: age,
+			user_id: user
+		})
 			.then(res => {
-				let user = res.data.user
+				console.log(res)
 				let newChats = [...chats]
-				newChats.append({
-					type: 'bot',
-					message: message,
-					next: res.data.next,
-					range: res.data.range,
+				res.data.messages.forEach(message => {
+					newChats.push({
+						type: 'bot',
+						message: message,
+						next: res.data.next,
+						range: res.data.range,
+					})
 				})
-				cookies.set('user', user.id)
-				this.setState({user: user, loading: false, chats: newChats})
+				cookies.set('user', res.data.user_id)
+				this.setState({user: res.data.user_id, loading: false, chats: newChats, age: res.data.age})
 			})
 			.catch(res => {
 				console.log(res)
 				this.setState({error: true, loading: false})
 			})
+	}
+	fork() {
+		const { user, chats, name } = this.state
+		const { cookies } = this.props
+		let ans = chats[chats.length - 1].message
+		axios.post('/api/fork', {
+			name: name,
+			answer: ans,
+			user_id: user
+		})
+			.then(res => {
+				console.log(res)
+				let newChats = [...chats]
+				res.data.messages.forEach(message => {
+					newChats.push({
+						type: 'bot',
+						message: message,
+						next: res.data.next,
+						range: res.data.range,
+					})
+				})
+				this.setState({loading: false, chats: newChats})
+			})
+			.catch(res => {
+				console.log(res)
+				this.setState({error: true, loading: false})
+			})
+	}
+	path1() {
+		const { user, chats, name } = this.state
+		const { cookies } = this.props
+		let ans = chats[chats.length - 1].message
+		axios.post('/api/path1', {
+			name: name,
+			answer: ans,
+			user_id: user
+		})
+			.then(res => {
+				console.log(res)
+				let newChats = [...chats]
+				res.data.messages.forEach(message => {
+					newChats.push({
+						type: 'bot',
+						message: message,
+						next: res.data.next,
+						range: res.data.range,
+						end: res.data.end
+					})
+				})
+				this.setState({loading: false, chats: newChats})
+			})
+			.catch(res => {
+				console.log(res)
+				this.setState({error: true, loading: false})
+			})
+
+	}
+	path2() {
+		const { user, chats, name } = this.state
+		const { cookies } = this.props
+		let ans = chats[chats.length - 1].message
+		axios.post('/api/path2', {
+			name: name,
+			answer: ans,
+			user_id: user
+		})
+			.then(res => {
+				console.log(res)
+				let newChats = [...chats]
+				res.data.messages.forEach(message => {
+					newChats.push({
+						type: 'bot',
+						message: message,
+						next: res.data.next,
+						range: res.data.range,
+						timer: res.data.timer
+					})
+				})
+				this.setState({loading: false, chats: newChats})
+			})
+			.catch(res => {
+				console.log(res)
+				this.setState({error: true, loading: false})
+			})
+
 	}
 	next() {
 		const { chats } = this.state
@@ -126,6 +255,14 @@ class App extends React.Component {
 		console.log(key)
 		if (key === 'getAge') {
 			this.getAge()
+		} else if (key === 'saveNameAndAge') {
+			this.saveNameAndAge()
+		} else if (key === 'fork') {
+			this.fork()
+		} else if (key === 'path1') {
+			this.path1()
+		} else if (key === 'path2') {
+			this.path2()
 		}
 		// TODO
 	}
@@ -148,13 +285,18 @@ class App extends React.Component {
 	}
 	populateChats() {
 		const { chats } = this.state
-		return chats.map((chat, i) => {
+		let res = []
+		chats.forEach((chat, i) => {
 			if (chat.type === 'bot') {
-				return <BotBox message={chat.message} key={i}/>
+				res.push(<BotBox message={chat.message} key={i}/>)
+				if (chat.timer) {
+					res.push(<TimerBox key={`${i}-{timer}`} />)
+				}
 			} else {
-				return <UserBox message={chat.message} key={i}/>
+				res.push(<UserBox message={chat.message} key={i}/>)
 			}
 		})
+		return res
 	}
 	populateInput() {
 		const { chats, rangeVal, textVal } = this.state
@@ -165,6 +307,8 @@ class App extends React.Component {
 					submit={this.handleUserInput}
 					value={rangeVal}
 				/>
+			} else if (lastChat.timer) {
+				return <Timer />
 			} else {
 				return <TextInput
 					submit={this.handleUserInput}
@@ -180,6 +324,7 @@ class App extends React.Component {
 		}
 	}
 	render() {
+		console.log('main', this.state)
 		const { chats, loading } = this.state
 		if (loading) {
 			return <Loader />
@@ -190,8 +335,16 @@ class App extends React.Component {
 						<div style={CONVERSATIONAREA}>
 							{ this.populateChats() }
 						</div>
-						<div>
-							{ this.populateInput() }
+					</div>
+					<div className="fixed">
+						<div className="box">
+							<footer>
+								<div className="flex-out">
+									<div className="flex-in">
+										{ this.populateInput() }
+									</div>
+								</div>
+							</footer>
 						</div>
 					</div>
 				</div>
@@ -215,14 +368,27 @@ class BotBox extends React.PureComponent {
 	}
 }
 
+const CHATUSERRIGHT = {
+	boxSizing: 'border-box',
+	alignSelf: 'flex-end',
+	backgroundColor: 'rgb(0, 91, 187)',
+	display: 'inline-block',
+	padding: '0.618rem 1rem',
+	marginBottom: '0.236rem',
+	borderRadius: '1.375rem 1.375rem 0.25rem',
+	wordBreak: 'break-word'
+}
+
 class UserBox extends React.PureComponent {
 	render() {
 		const { message } = this.props
-		return <div style={CHATBOX}>
-			<p style={TEXT}>
-				{message}
-			</p>
-		</div>
+		return <div>
+				<div style={CHATUSERRIGHT}>
+				<p style={TEXT}>
+					{message}
+				</p>
+				</div>
+			</div>
 	}
 }
 
@@ -245,21 +411,27 @@ class TextInput extends React.PureComponent {
 	render() {
 		const { value } = this.state
 		const { disabled } = this.props
-		return <div>
-			<input
-				type="text"
-				onChange={this.handleChange}
-				value={value}
-				disabled={disabled}
-			/>
+		return <React.Fragment>
+			<div className="flex-box">
+				<input
+					className="flex-input"
+					type="text"
+					onChange={this.handleChange}
+					value={value}
+					disabled={disabled}
+					placeholder="Type a message here"
+				/>
+			</div>
+			<span></span>
 			<Button
+				className="send-button"
 				variant="primary"
 				onClick={this.handleSubmit}
 				disabled={disabled}
 			>
 				Submit
 			</Button>
-		</div>
+		</React.Fragment>
 	}
 }
 
@@ -289,12 +461,20 @@ class RangeInput extends React.PureComponent {
         orientation="horizontal"
         onChange={this.handleChange}
       />
-			<Button
+			<div
+				className="send-button"
 				variant="primary"
 				onClick={this.handleSubmit}
 			>
 				Submit
-			</Button>
+			</div>
+		</div>
+	}
+}
+
+class Timer extends React.Component {
+	render() {
+		return <div>
 		</div>
 	}
 }
