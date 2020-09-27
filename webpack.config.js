@@ -7,7 +7,7 @@ module.exports = {
 	context: __dirname,
 	entry: './js/index',
 	output: {
-		path: path.resolve('./static'),
+		path: path.resolve('./app/static'),
 		filename: "bundle.js",
 	},
 	plugins: [

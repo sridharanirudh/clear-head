@@ -1,0 +1,113 @@
+.fixed {
+	box-sizing: border-box;
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	width: 100%;
+}
+
+.box {
+	box-sizing: border-box;
+	margin: 0px auto;
+	border-left: 1px solid rgb(230, 230, 230);
+	border-right: 1px solid rgb(230, 230, 230);
+	width: 832px;
+}
+
+footer {
+	transition: height 0.3s ease-in-out 0s;
+	min-height: 59px;
+	height: 60px;
+	user-select: none;
+	background: rgb(255, 255, 255) none repeat scroll 0% 0%;
+}
+
+.flex-out {
+	box-sizing: border-box;
+	display: flex;
+	align-items: baseline;
+	justify-content: flex-start;
+	min-height: 60px;
+}
+
+.flex-in {
+	box-sizing: border-box;
+	display: flex;
+	align-items: baseline;
+	justify-content: flex-end;
+	width: 100%;
+}
+
+.flex-box {
+	box-sizing: border-box;
+	flex: 1 1 auto;
+}
+
+.flex-input {
+	font-size: 1em;
+	width: calc(100% - 2rem);
+	border: 0px none;
+	padding-left: 2rem;
+	cursor: pointer;
+	border: 0px;
+	border-radius: 0;
+	background-color: transparent !important;
+	line-height: 32px;
+}
+
+.send-button {
+	box-sizing: border-box;
+	padding: 18px 16px 18px 2rem;
+	color: black;
+	cursor: pointer;
+	font-weight: 400;
+	font-size: 1em;
+	letter-spacing: 0.7px;
+	line-height: 1.5;
+}
+
+input[type="text"] {
+	background-color: transparent !important;
+}
+
+.user-box {
+	box-sizing: border-box;
+	align-self: flex-end;
+	background-color: rgb(0, 91, 187);
+	display: inline-block;
+	padding: 0.618rem 1rem;
+	margin-bottom: 0.236rem;
+	border-radius: 1.375rem 1.375rem 0.25rem;
+	word-break: break-word;
+	color: rgb(0, 0, 0);
+	font-family: sofia-pro, Helvetica, Arial, sans-serif;
+	font-weight: 400;
+	letter-spacing: 0.7px;
+	line-height: 1.5;
+}
+
+.user-message {
+	word-break: break-word;
+	color: rgb(0, 0, 0);
+	font-family: sofia-pro, Helvetica, Arial, sans-serif;
+	font-weight: 400;
+	letter-spacing: 0.7px;
+	line-height: 1.5;
+}
+.user-right {
+	max-width: 100%;
+	margin-bottom: 1.618rem;
+	position: relative;
+	right: -88%;
+}
+.b {
+	display: inline-block;
+	float: right;
+	margin-top: -2rem;
+}
+.rs {
+	max-width: 70%;
+    top: 1rem;
+    margin-left: 3rem;
+}
+}
