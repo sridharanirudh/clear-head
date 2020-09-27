@@ -1,10 +1,14 @@
 from . import chat
 from app.model import User, Sessions
-from flask import Flask, request
+from flask import Flask, request, render_template
 from app import db
 import uuid
 
 @chat.route('/', methods= ['GET', 'POST'])
+def index():
+    return render_template('index.html')
+
+@chat.route('/intro', methods= ['GET', 'POST'])
 def introduction():
     if request.method == 'GET':
         message = "Hi, to get started let us know your name and age :)"
@@ -15,7 +19,8 @@ def introduction():
 def start():
     if request.method == 'POST':
         if 'user_id' in request.form:
-            
+            # TODO
+            pass
         else:
             name = request.form['name']
             age = int(request.form['age'])
