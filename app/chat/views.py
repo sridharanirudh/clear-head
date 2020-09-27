@@ -99,15 +99,17 @@ def is_good():
         req = request.json
         user_id = req['user_id']
         name = user[user_id]['name']
+        yes = False
         if req['answer'] in ['yes', 'Yes', 'Sure', 'sure', 'okay', 'Okay']:
             yes = True
         if not yes:
-            messages = ["It was nice talking to you {name}.", "Do come by for your next session :)"]
+            messages = [f"It was nice talking to you {name}.", "Do come by for your next session :)"]
         # else:
             # messages = "Temporary"
             # Need to query the sessions table for all values of user_id. Generate a plot on the start level per day"
         response = {
             'messages': messages,
+            'next': 'end',
             'end': True
         }
         return jsonify(response)
@@ -119,12 +121,17 @@ def is_bad():
         quantity = int(req['answer'])
         user_id = req['user_id']
         name = user[user_id]['name']
+        next_ = 'post'
+        timer = 0
         if quantity >= 5:
-            messages = ["Lets get you calm down, {name}.", "Take deep breaths for 2 minutes and only concentrate on the breathing."]
+            messages = [f"Lets get you calm down, {name}.", "Take deep breaths for 2 minutes and only concentrate on the breathing."]
             timer = 2
         elif quantity >= 3:
-            messages = ["Lets relax first, {name}.", "Take deep breaths for 1 minute and only concentrate on the breathing."]
+            messages = [f"Lets relax first, {name}.", "Take deep breaths for 1 minute and only concentrate on the breathing."]
             timer = 1
+        else:
+            messages = [f"So {name}, What has been bothering you lately?"]
+            next_ = 'end'
 
         ##TODO
         #sess_id = req['session_id']
@@ -135,13 +142,14 @@ def is_bad():
         response = {
             'messages': messages,
             'timer': timer,
-            'next': 'post',
+            'next': next_,
         }
     return jsonify(response)
 
 @chat.route('/api/post', methods= ['POST'])
 def post():
     if request.method == 'POST':
+        req = request.json
         user_id = req['user_id']
         name = user[user_id]['name']
         messages = [f'So {name}, What has been bothering you lately?'],
@@ -154,6 +162,7 @@ def post():
 @chat.route('/api/end', methods= ['POST'])
 def relax():
     if request.method == 'POST':
+        req = request.json
         user_id = req['user_id']
         name = user[user_id]['name']
         messages = [f"{name}, I hope you feel better after sharing your troubles.", "Come back anytime when you want to talk"]

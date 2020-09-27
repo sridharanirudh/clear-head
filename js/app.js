@@ -6,6 +6,8 @@ import Loader from 'react-loader'
 import Slider from 'react-rangeslider'
 import Modal from 'react-bootstrap/Modal'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
 
 const CHATAREA = {
 	boxSizing: 'border-box',
@@ -116,7 +118,8 @@ class App extends React.Component {
 	getName() {
 		const { chats } = this.state
 		let nextChats = [
-			{type: 'bot', message: 'Hi, to get started let us know your name and age :)'},
+			{type: 'bot', message: 'Welcome to Serenity. We are here to help you.'},
+			{type: 'bot', message: 'To get started let us know your name and age :)'},
 			{type: 'bot', message: 'Please enter your name', next: 'getAge', _key: 'name'}
 		]
 		this.setState({chats: nextChats, loading: false})
@@ -229,13 +232,13 @@ class App extends React.Component {
 			.then(res => {
 				console.log(res)
 				let newChats = [...chats]
-				res.data.messages.forEach(message => {
+				res.data.messages.forEach((message, i) => {
 					newChats.push({
 						type: 'bot',
 						message: message,
 						next: res.data.next,
 						range: res.data.range,
-						timer: res.data.timer
+						timer: (i % 2 == 0) ? false : res.data.timer
 					})
 				})
 				this.setState({loading: false, chats: newChats})
@@ -244,11 +247,59 @@ class App extends React.Component {
 				console.log(res)
 				this.setState({error: true, loading: false})
 			})
-
+	}
+	post() {
+		const { user, chats, name } = this.state
+		axios.post('/api/post', {
+			name: name,
+			user_id: user
+		})
+			.then(res => {
+				console.log(res)
+				let newChats = [...chats]
+				res.data.messages.forEach((message, i) => {
+					newChats.push({
+						type: 'bot',
+						message: message,
+						next: res.data.next,
+						range: res.data.range,
+						timer: (i % 2 == 0) ? false : res.data.timer
+					})
+				})
+				this.setState({loading: false, chats: newChats})
+			})
+			.catch(res => {
+				console.log(res)
+				this.setState({error: true, loading: false})
+			})
+	}
+	end() {
+		const { user, chats, name } = this.state
+		axios.post('/api/end', {
+			name: name,
+			user_id: user
+		})
+			.then(res => {
+				console.log(res)
+				let newChats = [...chats]
+				res.data.messages.forEach((message, i) => {
+					newChats.push({
+						type: 'bot',
+						message: message,
+						next: res.data.next,
+						range: res.data.range,
+						timer: (i % 2 == 0) ? false : res.data.timer
+					})
+				})
+				this.setState({loading: false, chats: newChats})
+			})
+			.catch(res => {
+				console.log(res)
+				this.setState({error: true, loading: false})
+			})
 	}
 	next() {
 		const { chats } = this.state
-		console.log(chats)
 		let key = chats[chats.length - 2].next
 		console.log(key)
 		if (key === 'getAge') {
@@ -261,6 +312,10 @@ class App extends React.Component {
 			this.path1()
 		} else if (key === 'path2') {
 			this.path2()
+		} else if (key === "post") {
+			this.post()
+		} else if (key === "end") {
+			this.end()
 		}
 		// TODO
 	}
@@ -288,7 +343,7 @@ class App extends React.Component {
 			if (chat.type === 'bot') {
 				res.push(<BotBox message={chat.message} key={i}/>)
 				if (chat.timer) {
-					res.push(<TimerBox key={`${i}-{timer}`} />)
+					res.push(<TimerBox key={`${i}-{timer}`} cancel={this.next} startTimer={this.toggleModal}/>)
 				}
 			} else {
 				res.push(<UserBox message={chat.message} key={i}/>)
@@ -305,8 +360,6 @@ class App extends React.Component {
 					submit={this.handleUserInput}
 					value={rangeVal}
 				/>
-			} else if (lastChat.timer) {
-				return <Timer />
 			} else {
 				return <TextInput
 					submit={this.handleUserInput}
@@ -321,9 +374,13 @@ class App extends React.Component {
 			/>
 		}
 	}
-	toggleModal() {
+	toggleModal(loading = false) {
 		const { showModal } = this.state
-		this.setState({showModal: !showModal})
+		if (showModal) {
+			this.setState({showModal: false, loading: true}, this.next)
+		} else {
+			this.setState({showModal: true})
+		}
 	}
 	render() {
 		console.log('main', this.state)
@@ -352,6 +409,7 @@ class App extends React.Component {
 								['#F7B801', 0.33],
 								['#A30000', 0.33],
 							]}
+							onComplete={this.next}
 						>
 							{({ remainingTime }) => remainingTime}
 						</CountdownCircleTimer>
@@ -518,9 +576,22 @@ class RangeInput extends React.PureComponent {
 	}
 }
 
-class Timer extends React.Component {
+class TimerBox extends React.PureComponent {
 	render() {
+		const { message, cancel, startTimer } = this.props
 		return <div>
+			<div style={CHATBOX}>
+				<ButtonToolbar aria-label="Toolbar with button groups">
+					<ButtonGroup className="mr-2" aria-label="First group">
+						<Button onClick={startTimer.bind(null)}>
+							Start Timer
+						</Button>
+						<Button onClick={cancel.bind(null)}>
+							Cancel
+						</Button>
+					</ButtonGroup>
+				</ButtonToolbar>
+			</div>
 		</div>
 	}
 }
