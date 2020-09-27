@@ -7,26 +7,25 @@ import uuid
 @chat.route('/', methods= ['GET', 'POST'])
 def introduction():
     if request.method == 'GET':
-        if 'user_id' in request.form:
-            message = "Hi, to get started let us know your name and age :)"
-        else:
-            #find name
-            message = "hello"
+        message = "Hi, to get started let us know your name and age :)"
 
     return message
 
-@chat.route('/ques', methods= ['POST'])
-def start_question():
+@chat.route('/start', methods= ['POST'])
+def start():
     if request.method == 'POST':
-        name = request.form['name']
-        age = int(request.form['age'])
-        user = User(
-            user_id=uuid.uuid4().hex,
-            name = name,
-            age = age
-        )
-        db.session.add(user)
-        db.session.commit()
+        if 'user_id' in request.form:
+            
+        else:
+            name = request.form['name']
+            age = int(request.form['age'])
+            user = User(
+                user_id=uuid.uuid4().hex,
+                name = name,
+                age = age
+            )
+            db.session.add(user)
+            db.session.commit()
     """
     TBD: find out the name of the user through the session id. need to discuss how. 
     Maybe required to store a row in session table.
