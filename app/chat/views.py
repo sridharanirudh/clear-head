@@ -29,11 +29,18 @@ def start():
                 name = name,
                 age = age
             )
+            session_uuid = uuid.uuid4().hex
+            sess = Sessions(
+                session_uuid = session_uuid,
+                user = user
+            )
             db.session.add(user)
+            db.session.add(sess)
             db.session.commit()
 
     response = {
         'message': [f"Hey {name}, how are you doing today?"],
+        'session_id': session_uuid,
         'next': 'fork',
     }
     return jsonify(response)
@@ -68,8 +75,6 @@ def is_good():
         else:
             message = "Temporary"
             # Need to query the sessions table for all values of user_id. Generate a plot on the start level per day"
-
-
         response = {
             'message': message,
             'end': True
@@ -88,10 +93,16 @@ def is_bad():
             timer = 1
 
         ##TODO
-        #Create session db
-
+        sess_id = request.form['session_id']
+        sess = Sessions.query.filter_by(session_id = sess_id).first()
+        sess.start_level = quantity
+        db.session.commit()
         response = {
             'message': message,
             'timer': timer,
             'post_message': ['What has been bothering you lately?'],
         }
+
+@chat.route('/serious', methods= ['POST'])
+def end_fork():
+    if 

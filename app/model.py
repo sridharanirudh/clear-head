@@ -55,7 +55,8 @@ class Sessions(db.Model):
     )
     #Add a range on level to be between 0 and 10
     start_level = db.Column(
-        db.Integer()
+        db.Integer(),
+        default = -1
     )
     end_level = db.Column(
         db.Integer(),
