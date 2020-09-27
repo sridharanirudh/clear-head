@@ -100,3 +100,14 @@ input[type="text"] {
 	position: relative;
 	right: -88%;
 }
+.b {
+	display: inline-block;
+	float: right;
+	margin-top: -2rem;
+}
+.rs {
+	max-width: 70%;
+    top: 1rem;
+    margin-left: 3rem;
+}
+}

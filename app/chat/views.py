@@ -76,7 +76,7 @@ def fork():
         answer = req['answer'].lower()
         # name = User.query.filter_by(user_id = user_id).first().name
         # import pdb; pdb.set_trace()
-        name = user[user_id].name
+        name = user[user_id]['name']
         if answer == 'good':
             messages = [f"It's great that you are feeling good today {name}.", "Would you like to see your previous sessions?"]
             next_route = 'path1'
@@ -122,8 +122,8 @@ def is_bad():
             timer = 1
 
         ##TODO
-        sess_id = req['session_id']
-        sess[sess_id]['start'] = quantity
+        #sess_id = req['session_id']
+        #sess[sess_id]['start'] = quantity
         # sess = Sessions.query.filter_by(session_id = sess_id).first()
         # sess.start_level = quantity
         # db.session.commit()
@@ -133,7 +133,3 @@ def is_bad():
             'post_message': ['What has been bothering you lately?'],
         }
     return jsonify(response)
-
-# @chat.route('/serious', methods= ['POST'])
-# def end_fork():
-#     if 

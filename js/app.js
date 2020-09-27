@@ -4,6 +4,8 @@ import { withCookies, Cookies } from 'react-cookie'
 import Button from 'react-bootstrap/Button'
 import Loader from 'react-loader'
 import Slider from 'react-rangeslider'
+import Modal from 'react-bootstrap/Modal'
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 
 const CHATAREA = {
 	boxSizing: 'border-box',
@@ -69,25 +71,21 @@ class App extends React.Component {
 			age: null,
 			next: null,
 			textVal: "",
-			rangeVal: 1
+			rangeVal: 1,
+			showModal: false
 		}
 		this.getAge = this.getAge.bind(this)
 		this.getName = this.getName.bind(this)
 		this.saveNameAndAge = this.saveNameAndAge.bind(this)
 		this.next = this.next.bind(this)
 		this.handleUserInput = this.handleUserInput.bind(this)
+		this.toggleModal = this.toggleModal.bind(this)
 	}
 	componentDidMount() {
 		this.fetchUserInformation()
 	}
 	fetchUserInformation() {
-		const { cookies } = this.props
-		let user = cookies.get('user')
-		if (user) {
-			this.start(user)
-		} else {
-			this.getName()
-		}
+		this.getName()
 	}
 	start(user_id) {
 		const { chats } = this.state
@@ -323,13 +321,42 @@ class App extends React.Component {
 			/>
 		}
 	}
+	toggleModal() {
+		const { showModal } = this.state
+		this.setState({showModal: !showModal})
+	}
 	render() {
 		console.log('main', this.state)
-		const { chats, loading } = this.state
+		const { chats, loading, showModal } = this.state
 		if (loading) {
 			return <Loader />
 		} else if (chats.length > 0) {
-			return <div style={{display: 'block'}}>
+			return <div>
+				<Modal
+					size="sm"
+					show={showModal}
+					onHide={this.toggleModal}
+					aria-labelledby="example-modal-sizes-title-sm"
+				>
+					<Modal.Header closeButton>
+						<Modal.Title id="example-modal-sizes-title-sm" style={{textAlign: "center"}}>
+							Timer
+						</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<CountdownCircleTimer
+							isPlaying
+							duration={10}
+							colors={[
+								['#004777', 0.33],
+								['#F7B801', 0.33],
+								['#A30000', 0.33],
+							]}
+						>
+							{({ remainingTime }) => remainingTime}
+						</CountdownCircleTimer>
+					</Modal.Body>
+				</Modal>
 				<div style={{height: '100%'}}>
 					<div style={CHATAREA}>
 						<div style={CONVERSATIONAREA}>
@@ -339,11 +366,7 @@ class App extends React.Component {
 					<div className="fixed">
 						<div className="box">
 							<footer>
-								<div className="flex-out">
-									<div className="flex-in">
 										{ this.populateInput() }
-									</div>
-								</div>
 							</footer>
 						</div>
 					</div>
@@ -382,7 +405,7 @@ const CHATUSERRIGHT = {
 class UserBox extends React.PureComponent {
 	render() {
 		const { message } = this.props
-		return <div>
+		return <div style={{flexDirection: 'column', display: 'flex'}}>
 				<div style={CHATUSERRIGHT}>
 				<p style={TEXT}>
 					{message}
@@ -412,6 +435,8 @@ class TextInput extends React.PureComponent {
 		const { value } = this.state
 		const { disabled } = this.props
 		return <React.Fragment>
+		<div className="flex-out">
+			<div className="flex-in">
 			<div className="flex-box">
 				<input
 					className="flex-input"
@@ -431,7 +456,27 @@ class TextInput extends React.PureComponent {
 			>
 				Submit
 			</Button>
+			</div>
+		</div>
 		</React.Fragment>
+	}
+}
+
+class TimerModal extends React.Component {
+	render() {
+		return <Modal
+			size="sm"
+			show={smShow}
+			onHide={() => setSmShow(false)}
+			aria-labelledby="example-modal-sizes-title-sm"
+		>
+			<Modal.Header closeButton>
+				<Modal.Title id="example-modal-sizes-title-sm">
+					Small Modal
+				</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>...</Modal.Body>
+		</Modal>
 	}
 }
 
@@ -455,19 +500,20 @@ class RangeInput extends React.PureComponent {
 		const { value } = this.state
 		return <div>
 			<Slider
+				className="rs"
         value={value}
 				min={1}
 				max={10}
         orientation="horizontal"
         onChange={this.handleChange}
       />
-			<div
-				className="send-button"
+			<Button
+				className="b"
 				variant="primary"
 				onClick={this.handleSubmit}
 			>
 				Submit
-			</div>
+			</Button>
 		</div>
 	}
 }
