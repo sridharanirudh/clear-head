@@ -1,0 +1,198 @@
+.header {
+	background-color: #3090C7;
+	height : 150px;
+}
+
+.header h1{
+
+	height : 60px;
+	padding: 25px 20px 20px 20px;
+	font-family : "Arial Narrow";
+	color : white;
+	background-color : #3099B9;
+	font-size : 25px;
+	border-radius : 15px 25px 15px 10px;
+	border-color : black;
+}
+
+.main {
+	height : 800px;
+	background-color: #7D0558;
+}
+
+.main h3{
+	font-size:30px;
+	font-family: "Brush Script MT" ;
+}
+
+.align div{
+	float : left;	
+}
+
+.feed {
+	width:300px;
+	height:700px;
+	background-color: black;
+	margin-left: 10px;
+	margin-right:10px;
+	margin-top: 35px;
+}
+
+.chatbot {
+	position:relative;
+	left:530px;
+	top:60px;
+	height :630px;
+	width:450px;
+	background-color : #463E3F;
+	border-radius : 30px 30px 30px 30px;
+}
+
+
+.speaker{
+	position : relative;
+	top:20px;
+	left:170px;
+	width:100px;
+	height:4px;
+	background-color:white;
+	margin-bottom:40px;
+	border-radius : 50px 50px 50px 50px;
+}
+
+.chatbot-screen {
+	width:  410px;
+	height: 500px;
+	position: relative;
+	top:  0px;
+	left: 20px;
+	background-color: white;
+	overflow: scroll;
+	overflow: overlay;
+}
+
+.bot-face{
+	width:  30px;
+	height: 25px;
+	background-color: grey;
+	color: black;
+	font-family: "Times";
+	border-radius:0px 20px 20px 0px;
+	margin: 10px 0px 10px 10px;
+	padding: 5px 5px 5px 5px;
+	position:relative;
+	left:0px;
+}
+
+.bot-chat {
+	width:320px;
+	height:40px;
+	position:relative;
+	left:0px;
+	float: right;
+	
+	font-size:18px;
+	background-color:blue;
+	color : white;
+	font-style: "Times";
+
+	margin: 10px 0px 10px 10px;
+	padding: 5px 7px 5px 7px;
+
+	border-radius: 0px 20px 0px 20px;
+	border-width:5px 2px 5px 5px;
+	border-color:black;
+}
+
+.user-face{
+	width:  25px;
+	height: 25px;
+	background-color: grey;
+	color: black;
+	font-family: "Times";
+	border-radius:20px 0px 0px 20px;
+	margin: 10px 0px 10px 10px;
+	padding: 5px 5px 5px 5px;
+	position:relative;
+	left:360px;
+	float:right;
+}
+
+.user-chat {
+	width:320px;
+	height:40px;
+	position:relative;
+	right:23px;
+	
+	font-size:18px;
+	background-color:blue;
+	color : white;
+	font-style: "Times";
+
+	margin: 10px 0px 10px 10px;
+	padding: 7px 5px 7px 5px;
+
+	border-radius: 20px 0px 20px 0px;
+	border-width:5px 2px 5px 5px;
+	border-color:black;
+}
+
+.msg-area div,input{
+	height:45px;
+	width:360px;
+	position : relative;
+	left: 10px;
+	top:  18px;
+
+	border-width:0px 0px 0px 0px;	
+	border-radius : 25px 25px 25px 25px;
+	border-width : 1px 5px 2px 5px;
+}
+
+
+.button-shape button{
+	width: 60px;
+	height: 40px;
+	position: relative;
+	left: 20px;
+	top:  20px;
+	background-color:white;
+	border-radius: 25px 25px 25px 25px;
+	cursor: pointer;
+	padding: 4px 4px 4px 4px;
+	font-family: "Verdana";
+
+	transition-duration : 1s;
+}
+
+.button-shape button:hover{
+ 	background-color: #C12267;
+ 	color: white;
+}
+
+.footer {
+	height : 200px;
+}
+
+.footer li{
+	float:left;
+	padding: 5px 400px 5px 5px;
+	list-style : none;
+}
+
+
+.footer p{
+	
+}
+
+.header span{
+	font-size:55px;
+	color:#616D7E;
+	font-family: Garmond;
+}
+
+.footer span{
+
+	font-size: 45px;
+	font-family: Garamond;
+}
